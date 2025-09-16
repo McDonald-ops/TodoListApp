@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>To‑Do List with Calendar</title>
+  <link rel="stylesheet" href="script.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="profile‑avatar">
+        <img src="Quaestor (icon — Colour).png" alt="Profile Avatar">
+      </div>
+      <div class="settings‑icon">⚙️</div>
+    </div>
+
+    <!-- Calendar widget -->
+    <div class="calendar‑container">
+      <div class="cal-header">
+        <button id="prevMonth">&lt;</button>
+        <div id="monthYear"></div>
+        <button id="nextMonth">&gt;</button>
+      </div>
+      <div class="weekdays">
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+        <div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+      <div id="calendarDays" class="days"></div>
+    </div>
+
+    <!-- New task input -->
+   <div class="new‑task">
+  <input id="taskInput" placeholder="Add new task">
+  <button id="addTaskBtn">＋</button>
+  <div class="bell‑icon">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2C10.343 2 9 3.343 9 5v1.083C6.165 6.56 4 9.175 4 12v5l-1 1v1h18v-1l-1-1v-5c0-2.825-2.165-5.44-5-5.917V5c0-1.657-1.343-3-3-3zM7 17v-5c0-2.481 1.79-4.537 4.152-4.917L11 7c0-.551.449-1 1-1s1 .449 1 1v.083C15.21 7.463 17 9.519 17 12v5H7zm5 4c1.104 0 2-.896 2-2h-4c0 1.104.896 2 2 2z"/>
+    </svg>
+    <span class="badge">1</span>
+  </div>
+</div>
+
+
+    <!-- Filters -->
+    <div class="filters">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="active">Active</button>
+      <button data-filter="completed">Completed</button>
+    </div>
+
+    <!-- Task list -->
+    <ul id="taskList" class="taskList"></ul>
+
+    <!-- Footer summary -->
+    <div id="footer" class="footer">0 of 0 tasks done</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
