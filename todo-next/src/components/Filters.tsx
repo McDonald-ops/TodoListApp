@@ -1,8 +1,10 @@
 "use client";
 
-type Filter = "all" | "active" | "completed";
+import type { Filter } from "../types/todo";
 
-export default function Filters({
+import { memo } from "react";
+
+function FiltersBase({
   filter,
   onChange,
 }: {
@@ -34,3 +36,6 @@ export default function Filters({
     </div>
   );
 }
+
+const Filters = memo(FiltersBase);
+export default Filters;

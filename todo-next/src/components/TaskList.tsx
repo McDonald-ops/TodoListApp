@@ -2,22 +2,19 @@
 
 import { useEffect, useState } from "react";
 import TaskItem from "./TaskItem";
+import { memo, useCallback } from "react";
+import type { Task, TaskId } from "../types/todo";
 
-export type Task = {
-  text: string;
-  completed: boolean;
-};
-
-export default function TaskList({
+function TaskListBase({
   tasks,
   onToggle,
   onRemove,
 }: {
   tasks: Task[];
-  onToggle: (index: number) => void;
-  onRemove: (index: number) => void;
+  onToggle: (id: TaskId) => void;
+  onRemove: (id: TaskId) => void;
 }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<TaskId | null>(null);
 
   // Close menu on outside click
   useEffect(() => {
@@ -31,21 +28,26 @@ export default function TaskList({
 
   return (
     <ul className="list-none mb-6">
-      {tasks.map((t, i) => (
-        <div key={`${t.text}-${i}`} data-task-menu>
+      {tasks.length === 0 ? (
+        <li className="text-center text-sm text-[#7DAE9D]">No tasks yet</li>
+      ) : tasks.map((t) => (
+        <div key={t.id} data-task-menu>
           <TaskItem
-            index={i}
+            id={t.id}
             text={t.text}
             completed={t.completed}
             onToggle={onToggle}
-            onRemove={(idx) => { onRemove(idx); setOpenIndex(null); }}
-            menuOpen={openIndex === i}
-            onToggleMenu={(idx) => setOpenIndex(prev => prev === idx ? null : idx)}
+            onRemove={(id) => { onRemove(id); setOpenIndex(null); }}
+            menuOpen={openIndex === t.id}
+            onToggleMenu={(id) => setOpenIndex(prev => prev === id ? null : id)}
           />
         </div>
       ))}
     </ul>
   );
 }
+
+const TaskList = memo(TaskListBase);
+export default TaskList;
 
 

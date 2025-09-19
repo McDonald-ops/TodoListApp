@@ -1,23 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-function getDaysMatrix(date: Date): { label: number; type: "prev" | "curr" }[] {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDayIndex = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevDays = new Date(year, month, 0).getDate();
-
-  const cells: { label: number; type: "prev" | "curr" }[] = [];
-  for (let x = firstDayIndex; x > 0; x--) {
-    cells.push({ label: prevDays - x + 1, type: "prev" });
-  }
-  for (let i = 1; i <= daysInMonth; i++) {
-    cells.push({ label: i, type: "curr" });
-  }
-  return cells;
-}
+import { WEEKDAYS, getDaysMatrix } from "../utils/calendar";
 
 export default function Calendar() {
   const [currDate, setCurrDate] = useState<Date>(new Date());
@@ -57,7 +41,7 @@ export default function Calendar() {
         </button>
       </div>
       <div className="grid grid-cols-7 text-center">
-        {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(w => (
+        {WEEKDAYS.map(w => (
           <div key={w} className="text-[12px] text-[#7DAE9D] mb-1">{w}</div>
         ))}
       </div>

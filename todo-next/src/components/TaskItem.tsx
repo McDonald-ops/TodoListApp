@@ -1,18 +1,21 @@
 "use client";
 
 import { useRef } from "react";
+import type { TaskId } from "../types/todo";
 
 export type TaskItemProps = {
-  index: number;
+  id: TaskId;
   text: string;
   completed: boolean;
-  onToggle: (index: number) => void;
-  onRemove: (index: number) => void;
+  onToggle: (id: TaskId) => void;
+  onRemove: (id: TaskId) => void;
   menuOpen: boolean;
-  onToggleMenu: (index: number) => void;
+  onToggleMenu: (id: TaskId) => void;
 };
 
-export default function TaskItem({ index, text, completed, onToggle, onRemove, menuOpen, onToggleMenu }: TaskItemProps) {
+import { memo } from "react";
+
+function TaskItemBase({ id, text, completed, onToggle, onRemove, menuOpen, onToggleMenu }: TaskItemProps) {
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -21,19 +24,27 @@ export default function TaskItem({ index, text, completed, onToggle, onRemove, m
         <input
           type="checkbox"
           checked={completed}
-          onChange={() => onToggle(index)}
+          onChange={() => onToggle(id)}
           className="mr-2 w-[18px] h-[18px]"
           aria-label={completed ? "Mark as active" : "Mark as completed"}
         />
         <span className={`${completed ? "line-through opacity-60 text-[#7DAE9D]" : "text-[#2A8D63]"}`}>{text}</span>
       </div>
-      <div ref={buttonRef} className="relative text-[18px] px-[6px] cursor-pointer" onClick={() => onToggleMenu(index)}>
-        ⋮
+      <div ref={buttonRef} className="relative text-[18px] px-[6px]">
+        <button
+          type="button"
+          aria-haspopup="menu"
+          aria-expanded={menuOpen}
+          className="cursor-pointer"
+          onClick={() => onToggleMenu(id)}
+        >
+          ⋮
+        </button>
         <div className={`absolute top-full right-0 bg-white border border-[#CADACA] rounded shadow mt-1 whitespace-nowrap z-10 ${menuOpen ? "block" : "hidden"}`}>
           <button
             type="button"
             className="block w-full text-left px-3 py-1 text-[14px] text-[#2A8D63] hover:bg-[rgba(217,243,228,0.8)]"
-            onClick={() => onRemove(index)}
+            onClick={() => onRemove(id)}
           >
             Remove Task
           </button>
@@ -42,5 +53,8 @@ export default function TaskItem({ index, text, completed, onToggle, onRemove, m
     </li>
   );
 }
+
+const TaskItem = memo(TaskItemBase);
+export default TaskItem;
 
 
