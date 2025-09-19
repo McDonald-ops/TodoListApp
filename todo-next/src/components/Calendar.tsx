@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { WEEKDAYS, getDaysMatrix } from "../utils/calendar";
 
+// Month calendar header and grid; matches original behavior
 export default function Calendar() {
   const [currDate, setCurrDate] = useState<Date>(new Date());
 

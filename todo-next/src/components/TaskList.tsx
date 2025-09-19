@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import TaskItem from "./TaskItem";
-import { memo, useCallback } from "react";
+import { memo } from "react";
 import type { Task, TaskId } from "../types/todo";
 
+// Renders the list of tasks and manages the per-item menu open state
 function TaskListBase({
   tasks,
   onToggle,

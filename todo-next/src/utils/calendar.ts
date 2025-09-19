@@ -1,5 +1,7 @@
+// Abbreviated weekday labels for calendar header
 export const WEEKDAYS: string[] = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+// Builds cells for a month grid including the previous month's tail
 export function getDaysMatrix(date: Date): { label: number; type: "prev" | "curr" }[] {
   const year = date.getFullYear();
   const month = date.getMonth();

@@ -15,6 +15,7 @@ export type TaskItemProps = {
 
 import { memo } from "react";
 
+// Single task row with checkbox and overflow menu
 function TaskItemBase({ id, text, completed, onToggle, onRemove, menuOpen, onToggleMenu }: TaskItemProps) {
   const buttonRef = useRef<HTMLDivElement | null>(null);
 

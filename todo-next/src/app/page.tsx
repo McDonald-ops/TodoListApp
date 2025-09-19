@@ -5,10 +5,11 @@ import { useMemo, useState, useCallback, useEffect } from "react";
 import Calendar from "../components/Calendar";
 import Filters from "../components/Filters";
 import TaskList from "../components/TaskList";
-import type { Task, Filter, TaskId } from "../types/todo";
+import type { Filter, TaskId } from "../types/todo";
 import { useTasks } from "../hooks/useTasks";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+// App composition: top bar, calendar, task input, filters, list, footer
 export default function Home() {
   const { tasks, addTask, toggleTask, removeTask } = useTasks([]);
   const [filter, setFilter] = useState<Filter>("all");
@@ -20,7 +21,6 @@ export default function Home() {
   useEffect(() => {
     const f = params.get("filter") as Filter | null;
     if (f && ["all","active","completed"].includes(f)) setFilter(f);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
   const updateFilter = useCallback((f: Filter) => {
     const usp = new URLSearchParams(params.toString());

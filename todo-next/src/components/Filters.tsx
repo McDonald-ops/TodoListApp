@@ -4,6 +4,7 @@ import type { Filter } from "../types/todo";
 
 import { memo } from "react";
 
+// Segmented control for switching the filter state
 function FiltersBase({
   filter,
   onChange,

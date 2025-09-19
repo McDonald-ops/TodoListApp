@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
+  // Initialize from localStorage at mount; falls back to initialValue on SSR/errors
   const isFirst = useRef(true);
   const [value, setValue] = useState<T>(() => {
     if (typeof window === "undefined") return initialValue;
@@ -15,6 +16,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   });
 
   useEffect(() => {
+    // Skip persisting on the first render to avoid overriding existing storage
     if (isFirst.current) {
       isFirst.current = false;
       return;
