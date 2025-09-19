@@ -5,6 +5,8 @@ A **simple and interactive to-do list app** that helps users track their daily t
 
 The UI is clean, intuitive, and responsive, making task management effortless on both desktop and mobile devices.
 
+Please refer to todo-next folder to view this project.
+
 ## Who It’s For & Why It Matters
 This project is designed for anyone who wants to:
 - Organize daily tasks efficiently.
