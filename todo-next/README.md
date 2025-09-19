@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# To‑Do List with Calendar (Next.js + TypeScript + Tailwind)
 
-## Getting Started
+A simple, fast to‑do list app with an inline calendar and filters. Migrated from plain HTML/CSS/JS to Next.js (App Router) with TypeScript and TailwindCSS, preserving original UI and behavior while improving structure, accessibility, and maintainability.
 
-First, run the development server:
+## Project structure
+
+- `src/app/`
+  - `layout.tsx`: Root layout, metadata, semantic regions
+  - `page.tsx`: App composition (top bar, calendar, input, filters, list, footer)
+  - `globals.css`: Global styles (background, colors, utilities)
+  - `error.tsx`, `not-found.tsx`: Error and 404 pages
+- `src/components/`
+  - `Calendar.tsx`: Month header and grid
+  - `Filters.tsx`: Segmented control for All/Active/Completed
+  - `TaskList.tsx`: List wrapper, menu state, empty state
+  - `TaskItem.tsx`: Single task row with checkbox and menu
+- `src/hooks/`
+  - `useLocalStorage.ts`: Persist state to localStorage
+  - `useClickOutside.ts`: Detect clicks outside an element
+  - `useTasks.ts`: Encapsulated task state and operations
+- `src/types/todo.ts`: Shared types (`Task`, `TaskId`, `Filter`)
+- `src/utils/calendar.ts`: Calendar constants and helpers
+
+## Tech stack
+
+- Next.js (App Router)
+- TypeScript (strict)
+- TailwindCSS
+
+## Features
+
+- Add, toggle, and remove tasks
+- Filter by All / Active / Completed
+- Month calendar with previous/next navigation
+- LocalStorage persistence for tasks
+- URL-synced filter (`?filter=active`)
+- Accessible form semantics and menu controls
+- Clean, responsive UI using Tailwind
+
+## Setup
+
+Prerequisites: Node 18+
+
+```bash
+cd todo-next
+npm install
+```
+
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Visit http://localhost:3000
+
+## Build
+
+```bash
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Testing (suggested)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The project is set up to be test-friendly; add Vitest + React Testing Library:
+```bash
+npm i -D vitest @testing-library/react @testing-library/user-event @testing-library/jest-dom jsdom
+```
+Example test candidates:
+- `useTasks` add/toggle/remove
+- Filters behavior and URL sync
+- Calendar month navigation rendering
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Colors are encoded via Tailwind utility classes; globals contain a few utilities (spin animation, checkbox accent, sr-only).
+- Task IDs are stable, enabling reliable keys and operations.
+- No external state library is required; hooks keep things simple and scalable.
