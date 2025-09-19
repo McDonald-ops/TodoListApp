@@ -1,17 +1,33 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import Calendar from "../components/Calendar";
 import Filters from "../components/Filters";
-import TaskList, { Task } from "../components/TaskList";
-
-type Filter = "all" | "active" | "completed";
+import TaskList from "../components/TaskList";
+import type { Task, Filter, TaskId } from "../types/todo";
+import { useTasks } from "../hooks/useTasks";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { tasks, addTask, toggleTask, removeTask } = useTasks([]);
   const [filter, setFilter] = useState<Filter>("all");
   const [input, setInput] = useState<string>("");
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  useEffect(() => {
+    const f = params.get("filter") as Filter | null;
+    if (f && ["all","active","completed"].includes(f)) setFilter(f);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
+  const updateFilter = useCallback((f: Filter) => {
+    const usp = new URLSearchParams(params.toString());
+    if (f === "all") usp.delete("filter"); else usp.set("filter", f);
+    router.push(`${pathname}?${usp.toString()}`, { scroll: false });
+    setFilter(f);
+  }, [params, pathname, router]);
 
   const filteredTasks = useMemo(() => {
     if (filter === "active") return tasks.filter(t => !t.completed);
@@ -24,20 +40,14 @@ export default function Home() {
     [tasks]
   );
 
-  function addTask(): void {
-    const text = input.trim();
-    if (!text) return;
-    setTasks(prev => [...prev, { text, completed: false }]);
-    setInput("");
-  }
+  const onSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    const id = addTask(input);
+    if (id) setInput("");
+  }, [addTask, input]);
 
-  function toggleTask(index: number): void {
-    setTasks(prev => prev.map((t, i) => (i === index ? { ...t, completed: !t.completed } : t)));
-  }
-
-  function removeTask(index: number): void {
-    setTasks(prev => prev.filter((_, i) => i !== index));
-  }
+  const onToggle = useCallback((id: TaskId) => toggleTask(id), [toggleTask]);
+  const onRemove = useCallback((id: TaskId) => removeTask(id), [removeTask]);
 
   return (
     <div className="flex justify-center p-5">
@@ -56,15 +66,17 @@ export default function Home() {
         </div>
 
         {/* New task input */}
-        <div className="flex items-center mb-6">
+        <form className="flex items-center mb-6" onSubmit={onSubmit} aria-label="Add task">
+          <label htmlFor="task-input" className="sr-only">Add new task</label>
           <input
+            id="task-input"
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Add new task"
             className="flex-1 p-2 border border-[#CADACA] rounded-[16px] mr-1 text-sm text-[#2A8D63] placeholder:text-[#7DAE9D] bg-white outline-none"
           />
           <button
-            onClick={addTask}
+            type="submit"
             className="w-[30px] h-[30px] border-0 bg-[#4A7BD1] text-white rounded-full text-[20px] cursor-pointer hover:bg-[#3A5BB1] active:bg-[#2A4D91] transition-colors"
             aria-label="Add task"
           >
@@ -76,16 +88,16 @@ export default function Home() {
             </svg>
             <span className="absolute top-0 right-0 min-w-4 h-4 px-1 rounded-[8px] bg-[#e74c3c] text-white text-[10px] font-bold leading-4 text-center translate-x-1/2 -translate-y-1/2">1</span>
           </div>
-        </div>
+        </form>
 
         {/* Filters */}
-        <Filters filter={filter} onChange={setFilter} />
+        <Filters filter={filter} onChange={updateFilter} />
 
         {/* Task list */}
         <TaskList
           tasks={filteredTasks}
-          onToggle={index => toggleTask(index)}
-          onRemove={index => removeTask(index)}
+          onToggle={onToggle}
+          onRemove={onRemove}
         />
 
         {/* Footer */}
