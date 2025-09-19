@@ -4,7 +4,8 @@
 A **simple and interactive to-do list app** that helps users track their daily tasks and activities. The app features a **built-in calendar** to visualize the current date and navigate between months, while allowing users to **add, complete, filter, and remove tasks** with ease.  
 
 The UI is clean, intuitive, and responsive, making task management effortless on both desktop and mobile devices.
-#Please refer to todo-next folder for this project
+
+Please refer to todo-next folder for this project.
 
 ## Who It’s For & Why It Matters
 This project is designed for anyone who wants to:
