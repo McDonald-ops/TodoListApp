@@ -30,7 +30,7 @@ function TaskListBase({
   return (
     <ul className="list-none mb-6">
       {tasks.length === 0 ? (
-        <li className="text-center text-sm text-[#7DAE9D]">No tasks yet</li>
+        <li className="text-center text-sm font-bold text-[#7DAE9D]">No tasks yet</li>
       ) : tasks.map((t) => (
         <div key={t.id} data-task-menu>
           <TaskItem

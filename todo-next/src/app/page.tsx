@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect, Suspense } from "react";
 import Calendar from "../components/Calendar";
 import Filters from "../components/Filters";
 import TaskList from "../components/TaskList";
@@ -9,8 +9,8 @@ import type { Filter, TaskId } from "../types/todo";
 import { useTasks } from "../hooks/useTasks";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-// App composition: top bar, calendar, task input, filters, list, footer
-export default function Home() {
+// Component that uses useSearchParams wrapped in Suspense
+function HomeContent() {
   const { tasks, addTask, toggleTask, removeTask } = useTasks([]);
   const [filter, setFilter] = useState<Filter>("all");
   const [input, setInput] = useState<string>("");
@@ -101,8 +101,17 @@ export default function Home() {
         />
 
         {/* Footer */}
-        <div className="text-center text-sm text-[#7DAE9D]">{completedCount} of {tasks.length} tasks done</div>
+        <div className="text-center text-sm text-[#7DAE9D] font-bold">{completedCount} of {tasks.length} tasks done</div>
       </div>
     </div>
+  );
+}
+
+// App composition: top bar, calendar, task input, filters, list, footer
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
