@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState, useCallback, useEffect, Suspense } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import Calendar from "../components/Calendar";
 import Filters from "../components/Filters";
 import TaskList from "../components/TaskList";
 import type { Filter, TaskId } from "../types/todo";
 import { useTasks } from "../hooks/useTasks";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 // Component that uses useSearchParams wrapped in Suspense
 function HomeContent() {
@@ -108,10 +109,11 @@ function HomeContent() {
 }
 
 // App composition: top bar, calendar, task input, filters, list, footer
+const DynamicHomeContent = dynamic(() => Promise.resolve(HomeContent), {
+  ssr: false,
+  loading: () => <div className="flex justify-center p-5"><div className="w-[600px] text-center">Loading...</div></div>
+});
+
 export default function Home() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomeContent />
-    </Suspense>
-  );
+  return <DynamicHomeContent />;
 }
