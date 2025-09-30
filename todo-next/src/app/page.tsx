@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import dynamic from "next/dynamic";
 import Calendar from "../components/Calendar";
 import Filters from "../components/Filters";
 import TaskList from "../components/TaskList";
@@ -56,7 +55,7 @@ function HomeContent() {
         {/* Top bar */}
         <div className="flex justify-between items-center mb-6">
           <div className="w-10 h-10 relative">
-            <Image src="/avatar.png" alt="Profile Avatar" fill className="rounded-full object-cover" />
+            <Image src="/avatar.png" alt="Profile Avatar" fill className="rounded-full object-cover" sizes="40px" />
           </div>
           <div className="text-2xl cursor-pointer settings-spin">⚙️</div>
         </div>
@@ -109,11 +108,10 @@ function HomeContent() {
 }
 
 // App composition: top bar, calendar, task input, filters, list, footer
-const DynamicHomeContent = dynamic(() => Promise.resolve(HomeContent), {
-  ssr: false,
-  loading: () => <div className="flex justify-center p-5"><div className="w-[600px] text-center">Loading...</div></div>
-});
-
 export default function Home() {
-  return <DynamicHomeContent />;
+  return (
+    <Suspense fallback={<div className="flex justify-center p-5"><div className="w-[600px] text-center">Loading...</div></div>}>
+      <HomeContent />
+    </Suspense>
+  );
 }
